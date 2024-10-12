@@ -53,14 +53,14 @@ const data = new SlashCommandBuilder()
 
 In reality, you'll probably want to have an additional confirmation step before a ban actually executes. Check out the [button components section](/message-components/buttons) of the guide to see how to add confirmation buttons to your command responses, and listen to button clicks.
 
-## DM permission
+## Contexts
 
-By default, globally-deployed commands are also available for use in DMs. You can use <DocsLink section="builders" path="SlashCommandBuilder:Class#setDMPermission" type="method" /> to disable this behaviour. Commands deployed to specific guilds are not available in DMs.
+By default, globally-deployed commands are also available for use in DMs. Previously, you could use <DocsLink section="builders" path="SlashCommandBuilder:Class#setDMPermission" type="method" /> to disable this behaviour. However, with recent updates, this method has been deprecated, and you should now use <DocsLink section="builders" path="SlashCommandBuilder:Class#setContexts" type="method" /> instead to specify where your commands should be available. Commands deployed to specific guilds are not available in DMs.
 
-It doesn't make much sense for your `ban` command to be available in DMs, so you can add `setDMPermission(false)` to the builder to remove it:
+It doesn't make much sense for your `ban` command to be available in DMs, so you can add `setContexts(InteractionContextType.Guild)` to the builder so that it is only available in guilds:
 
 ```js {11-12}
-const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
+const { InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } = require('discord.js');
 
 const data = new SlashCommandBuilder()
 	.setName('ban')
@@ -71,7 +71,7 @@ const data = new SlashCommandBuilder()
 			.setDescription('The member to ban')
 			.setRequired(true))
 	.setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
-	.setDMPermission(false);
+	.setContexts(InteractionContextType.Guild);
 ```
 
-And that's all you need to know on slash command permissions!
+And that's all you need to know on slash command permissions and contexts!
